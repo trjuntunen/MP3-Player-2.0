@@ -7,19 +7,30 @@ import javazoom.jl.player.advanced.AdvancedPlayer;
 public class SongController {
 
 	public void play(Song song) {
-		do {
-			try {
-				String songPath = song.getPath().toString();
-				FileInputStream songInputStream = new FileInputStream(songPath);
-				AdvancedPlayer player = new AdvancedPlayer(songInputStream);
-				player.play();
-			} catch (FileNotFoundException | JavaLayerException e) {
-				e.printStackTrace();
-			}
+		try {
+			String songPath = song.getPath().toString();
+			FileInputStream songInputStream = new FileInputStream(songPath);
+			AdvancedPlayer player = new AdvancedPlayer(songInputStream);
+			playSongOnSeparateThread(player);
+		} catch (FileNotFoundException | JavaLayerException e) {
+			e.printStackTrace();
+		}
 
-		} while(true);
 	}
-	
+
+	public void playSongOnSeparateThread(AdvancedPlayer player) {
+		Thread thread = new Thread() {
+			public void run() {
+				try {
+					player.play();
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		thread.start();
+	}
+
 }
 
 

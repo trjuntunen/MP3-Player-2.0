@@ -23,45 +23,40 @@ public class SongList {
 		mp3Files = new ArrayList<File>();
 	}
 
-	public void build() {
-		Path path = Paths.get("/Users/tedjuntunen/Desktop");
-		buildMp3FileList(path);
+	public void build(Path pathToSearchForMp3Files) {
+		buildMp3FileList(pathToSearchForMp3Files);
 		for(File mp3File: mp3Files) {
-			Song song = createSongFromFile(mp3File);
-			if(songHasEmptyValues(song)) {
-				song.setTitle(song.getPath().toString());
-				song.setArtist("Unknown");
-				song.setAlbum("Unknown");
+			try {
+				AudioFile audioFile = AudioFileIO.read(mp3File);
+				Tag tag = audioFile.getTag();
+				
+				/* Get the 4 required fields from the file metadata */
+				String title = tag.getFirst(FieldKey.TITLE);
+				String artist = tag.getFirst(FieldKey.ARTIST);
+				String album = tag.getFirst(FieldKey.ALBUM);
+				Path path = Paths.get(mp3File.getAbsolutePath());
+				
+				Song song = new Song(title, artist, album, path);
+				checkForEmptyValuesAndSetDefaults(song);
+				songs.add(song);
+			} catch (CannotReadException | IOException | TagException | ReadOnlyFileException
+					| InvalidAudioFrameException e) {
+				e.printStackTrace();
 			}
-			songs.add(song);
 		}
 	}
-
-	private boolean songHasEmptyValues(Song song) {
-		if(song.getTitle() != "" && song.getArtist() != "" && song.getAlbum() != "") {
-			return false;
+	
+	private void checkForEmptyValuesAndSetDefaults(Song song) {
+		if(song.getTitle() == "") {
+			String path = song.getPath().toString();
+			song.setTitle(path);
 		}
-		return true;
-	}
-
-	private Song createSongFromFile(File mp3File) {
-		Song song = null;
-		try {
-			AudioFile f = AudioFileIO.read(mp3File);
-			Tag tag = f.getTag();
-			
-			/* Get the 4 required fields from the file metadata */
-			String title = tag.getFirst(FieldKey.TITLE);
-			String artist = tag.getFirst(FieldKey.ARTIST);
-			String album = tag.getFirst(FieldKey.ALBUM);
-			Path path = mp3File.toPath();
-			
-			song = new Song(title, artist, album, path);
-		} catch (CannotReadException | IOException | TagException | ReadOnlyFileException
-				| InvalidAudioFrameException e) {
-			e.printStackTrace();
+		if(song.getArtist() == "") {
+			song.setArtist("Unknown Arist");
 		}
-		return song;
+		if(song.getAlbum() == "") {
+			song.setAlbum("Unknown Album");
+		}
 	}
 
 	private void buildMp3FileList(Path path) {

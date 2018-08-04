@@ -35,7 +35,7 @@ public class Song {
 	}
 	
 	public void setAlbum(String newAlbum) {
-		
+		album = newAlbum;
 	}
 	
 	public Path getPath() {

@@ -7,6 +7,7 @@ public class Driver {
 		SongList songs = new SongList();
 		Path path = Paths.get("D:\\Music");
 		songs.build(path);
+		songs.sort();
 
 		MusicPlayerFrame frame = new MusicPlayerFrame(songs);
 		frame.show();

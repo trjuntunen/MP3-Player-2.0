@@ -1,8 +1,10 @@
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.ImageIcon;
 
@@ -34,7 +36,8 @@ public class SongList {
 				String title = tag.getFirst(FieldKey.TITLE);
 				String artist = tag.getFirst(FieldKey.ARTIST);
 				String album = tag.getFirst(FieldKey.ALBUM);
-				ImageIcon albumCover = new ImageIcon(tag.getFirstArtwork().getImage());
+				Image resizedAlbumImage = tag.getFirstArtwork().getImage().getScaledInstance(300, 300, 0);
+				ImageIcon albumCover = new ImageIcon(resizedAlbumImage);
 				Path path = Paths.get(mp3File.getAbsolutePath());
 				Song song = new Song(title, artist, album, albumCover, path);
 				checkForEmptyValuesAndSetDefaults(song);
@@ -44,6 +47,10 @@ public class SongList {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void sort() {
+		Collections.sort(songs);
 	}
 
 	private void checkForEmptyValuesAndSetDefaults(Song song) {

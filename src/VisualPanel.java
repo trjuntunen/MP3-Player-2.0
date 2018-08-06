@@ -13,12 +13,8 @@ public class VisualPanel extends JPanel {
 	}
 	
 	private void setup() {
-		setupLabel();
-	}
-	
-	private void setupLabel() {
 		label = new JLabel();
-		albumCover = new ImageIcon();
+		albumCover = new ImageIcon("C:\\Users\\epbba\\Desktop\\Stuff\\Programming\\Projects\\MP3-Player-2.0\\noAlbum.jpg");
 		label.setIcon(albumCover);
 		add(label);
 	}

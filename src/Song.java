@@ -1,7 +1,7 @@
 import java.nio.file.Path;
 import javax.swing.ImageIcon;
 
-public class Song {
+public class Song implements Comparable<Song> {
 
 	private String title;
 	private String artist;
@@ -47,6 +47,15 @@ public class Song {
 
 	public Path getPath() {
 		return path;
+	}
+
+	@Override
+	public int compareTo(Song other) {
+		int difference = this.getTitle().toLowerCase().compareTo(other.getTitle().toLowerCase());
+		if(difference == 0) {
+			return this.getArtist().toLowerCase().compareTo(other.getArtist().toLowerCase());
+		}
+		return difference;
 	}
 
 }

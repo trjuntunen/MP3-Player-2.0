@@ -1,4 +1,6 @@
 import java.awt.BorderLayout;
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 
 public class MusicPlayerFrame extends JFrame {
@@ -17,9 +19,12 @@ public class MusicPlayerFrame extends JFrame {
 		VisualPanel visualPanel = new VisualPanel();
 		EventManagement event = new EventManagement(visualPanel);
 		SongPanel songPanel = new SongPanel(songs, event);
+		ControlPanel controlPanel = new ControlPanel();
 		frame.add(songPanel, BorderLayout.CENTER);
 		frame.add(visualPanel, BorderLayout.NORTH);
+		frame.add(controlPanel, BorderLayout.SOUTH);
 		frame.pack();
+		frame.setMinimumSize(new Dimension(600, 600));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
 	}

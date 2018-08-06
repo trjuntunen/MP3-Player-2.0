@@ -4,6 +4,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
+
 import org.jaudiotagger.audio.AudioFile;
 import org.jaudiotagger.audio.AudioFileIO;
 import org.jaudiotagger.audio.exceptions.CannotReadException;
@@ -29,14 +31,12 @@ public class SongList {
 			try {
 				AudioFile audioFile = AudioFileIO.read(mp3File);
 				Tag tag = audioFile.getTag();
-				
-				/* Get the 4 required fields from the file metadata */
 				String title = tag.getFirst(FieldKey.TITLE);
 				String artist = tag.getFirst(FieldKey.ARTIST);
 				String album = tag.getFirst(FieldKey.ALBUM);
+				ImageIcon albumCover = new ImageIcon(tag.getFirstArtwork().getImage());
 				Path path = Paths.get(mp3File.getAbsolutePath());
-				
-				Song song = new Song(title, artist, album, path);
+				Song song = new Song(title, artist, album, albumCover, path);
 				checkForEmptyValuesAndSetDefaults(song);
 				songs.add(song);
 			} catch (CannotReadException | IOException | TagException | ReadOnlyFileException
@@ -45,7 +45,7 @@ public class SongList {
 			}
 		}
 	}
-	
+
 	private void checkForEmptyValuesAndSetDefaults(Song song) {
 		if(song.getTitle() == "") {
 			String path = song.getPath().toString();
@@ -81,9 +81,17 @@ public class SongList {
 	public Song get(int index) {
 		return songs.get(index);
 	}
-	
+
 	public int size() {
 		return songs.size();
+	}
+
+	public String[] getSongTitles() {
+		String[] stringArray = new String[songs.size()];
+		for(int i = 0; i < songs.size(); i++) {
+			stringArray[i] = songs.get(i).getTitle();
+		}
+		return stringArray;
 	}
 
 }

@@ -30,6 +30,10 @@ public class SongController {
 		thread.stop();
 		songIsPlaying = false;
 	}
+	
+//	public void pause() {
+//
+//	}
 
 	public void playSongOnSeparateThread(AdvancedPlayer player) {
 		thread = new Thread() {

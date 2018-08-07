@@ -15,20 +15,16 @@ public class SongPanel extends JPanel {
 	private SongController controller;
 	private EventManagement eventManage;
 
-	public SongPanel(SongList songList, EventManagement eventManage) {
+	public SongPanel(SongList songList, EventManagement eventManage, SongController controller) {
 		this.songList = songList;
 		this.eventManage = eventManage;
-		controller = new SongController();
+		this.controller = controller;
 		setup();
 	}
 
 	private void setup() {
 		setupSongList();
 		setupScrollPane();
-		setLayout();
-	}
-
-	private void setLayout() {
 		setLayout(new GridLayout(0, 1));
 	}
 

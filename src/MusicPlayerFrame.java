@@ -16,13 +16,18 @@ public class MusicPlayerFrame extends JFrame {
 	}
 
 	private void setup() {
+		SongController controller = new SongController();
 		VisualPanel visualPanel = new VisualPanel();
 		EventManagement event = new EventManagement(visualPanel);
-		SongPanel songPanel = new SongPanel(songs, event);
-		ControlPanel controlPanel = new ControlPanel();
+		SongPanel songPanel = new SongPanel(songs, event, controller);
+		ControlPanel controlPanel = new ControlPanel(controller);
 		frame.add(songPanel, BorderLayout.CENTER);
 		frame.add(visualPanel, BorderLayout.NORTH);
 		frame.add(controlPanel, BorderLayout.SOUTH);
+		setFrameProperties();
+	}
+	
+	private void setFrameProperties() {
 		frame.pack();
 		frame.setMinimumSize(new Dimension(600, 600));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

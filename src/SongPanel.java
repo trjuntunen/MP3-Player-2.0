@@ -25,9 +25,10 @@ public class SongPanel extends JPanel {
 	private void setup() {
 		setupSongList();
 		setupScrollPane();
-		setLayout(new GridLayout(0, 1));
+		setLayout(new GridLayout(1, 0));
+
 	}
-	
+
 	private void setupSongList() {
 		songs = new JList<String>(songList.getSongTitles());
 		addDoubleClickListenerToList();

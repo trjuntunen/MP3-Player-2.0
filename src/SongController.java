@@ -37,7 +37,7 @@ public class SongController {
 			try {
 				timeLeft = songInputStream.available();
 				player.close();
-			    songIsPlaying = false;
+				songIsPlaying = false;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -77,7 +77,7 @@ public class SongController {
 		thread.start();
 		songIsPlaying = true;
 	}
-	
+
 	public boolean songIsPlaying() {
 		return songIsPlaying;
 	}

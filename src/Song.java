@@ -40,7 +40,7 @@ public class Song implements Comparable<Song> {
 	public void setAlbum(String newAlbum) {
 		album = newAlbum;
 	}
-	
+
 	public ImageIcon getAlbumCover() {
 		return albumCover;
 	}

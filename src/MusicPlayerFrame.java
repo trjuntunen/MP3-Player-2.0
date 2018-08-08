@@ -28,14 +28,18 @@ public class MusicPlayerFrame extends JFrame {
 	}
 	
 	private void setFrameProperties() {
-		frame.pack();
 		frame.setMinimumSize(new Dimension(600, 600));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocationRelativeTo(null);
+		frame.pack();
 	}
 
 	public void show() {
-		frame.setVisible(true);
+		java.awt.EventQueue.invokeLater(new Runnable() {
+	        public void run() {
+	        	frame.setVisible(true);
+	        }
+	    });
 	}
 
 }

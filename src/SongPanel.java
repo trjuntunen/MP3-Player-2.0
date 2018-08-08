@@ -27,17 +27,17 @@ public class SongPanel extends JPanel {
 		setupScrollPane();
 		setLayout(new GridLayout(0, 1));
 	}
+	
+	private void setupSongList() {
+		songs = new JList<String>(songList.getSongTitles());
+		addDoubleClickListenerToList();
+	}
 
 	private void setupScrollPane() {
 		scrollPane = new JScrollPane(songs);
 		add(scrollPane);
 	}
 
-	private void setupSongList() {
-		songs = new JList<String>(songList.getSongTitles());
-		addDoubleClickListenerToList();
-	}
-	
 	public void addDoubleClickListenerToList() {
 		songs.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent event) {
@@ -46,10 +46,6 @@ public class SongPanel extends JPanel {
 					int index = list.locationToIndex(event.getPoint());
 					Song song = songList.get(index);
 					eventManage.setLabelImage(song.getAlbumCover());
-					if(controller.songIsPlaying()) {
-						controller.stop();
-					}
-					controller.setSongIsPlaying(true);
 					controller.play(song);
 				}
 			}

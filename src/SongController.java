@@ -1,55 +1,81 @@
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import javazoom.jl.decoder.JavaLayerException;
 import javazoom.jl.player.advanced.AdvancedPlayer;
 
 public class SongController {
 
-	 private boolean songIsPlaying;
-	 private AdvancedPlayer player;
-	 private Thread thread;
-	 
-	 public SongController() {
-		 songIsPlaying = false;
-	 }
-	
+	private boolean songIsPlaying;
+	private FileInputStream songInputStream;
+	private Thread thread;
+	private AdvancedPlayer player;
+	private int timeLeft;
+	private int total;
+	private Song currentSong;
+
+	public SongController() {
+		songIsPlaying = false;
+		timeLeft = 0;
+		total = 0;
+	}
+
 	public void play(Song song) {
 		try {
-			String songPath = song.getPath().toString();
-			FileInputStream songInputStream = new FileInputStream(songPath);
+			songInputStream = new FileInputStream(song.getPath().toString());
 			player = new AdvancedPlayer(songInputStream);
-			playSongOnSeparateThread(player);
-		} catch (FileNotFoundException | JavaLayerException e) {
+			playStreamOnNewThread();
+			currentSong = song;
+			total = songInputStream.available();
+		} catch (JavaLayerException | IOException e) {
 			e.printStackTrace();
 		}
-
 	}
-	
+
+	public void pause() {
+		if(songIsPlaying) {
+			try {
+				timeLeft = songInputStream.available();
+				player.close();
+			    songIsPlaying = false;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			try {
+				songInputStream = new FileInputStream(currentSong.getPath().toString());
+				songInputStream.skip(total - timeLeft);
+				player = new AdvancedPlayer(songInputStream);
+				playStreamOnNewThread();
+			} catch (IOException | JavaLayerException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	public void stop() {
-		thread.stop();
-		songIsPlaying = false;
+		if(songIsPlaying) {
+			player.close();
+			songIsPlaying = false;
+		}
 	}
-	
-//	public void pause() {
-//
-//	}
 
-	public void playSongOnSeparateThread(AdvancedPlayer player) {
+	private void playStreamOnNewThread() {
+		if(songIsPlaying) {
+			thread.stop();
+		}
 		thread = new Thread() {
 			public void run() {
 				try {
+					Thread.sleep(500);
 					player.play();
-				} catch (JavaLayerException e) {
+				} catch(Exception e) {
 					e.printStackTrace();
 				}
 			}
 		};
 		thread.start();
-	}
-	
-	public void setSongIsPlaying(boolean isPlaying) {
-		songIsPlaying = isPlaying;
+		songIsPlaying = true;
 	}
 	
 	public boolean songIsPlaying() {
